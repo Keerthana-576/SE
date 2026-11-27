@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Library Requirements Agents</title>
+<style>
+:root{
+  --bg:#f5f6f8; --panel:#ffffff; --text:#1c2430; --muted:#667085; --line:#e3e7ee;
+  --accent:#2f5fd0; --accent-soft:#e8eefc; --good:#18794e; --good-soft:#e3f5ec;
+  --warn:#9a6700; --warn-soft:#fff4d6; --bad:#b42318; --bad-soft:#fde8e6; --info-soft:#e6f0ff;
+  --shadow:0 1px 2px rgba(16,24,40,.06);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#12161d; --panel:#1b212b; --text:#e7ebf2; --muted:#98a2b3; --line:#2b3340;
+    --accent:#7aa2ff; --accent-soft:#223056; --good:#5fd39a; --good-soft:#15332a;
+    --warn:#f2c14e; --warn-soft:#3a2f12; --bad:#ff8f84; --bad-soft:#40201d; --info-soft:#1d2c4a;
+    --shadow:none;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{background:var(--panel);border-bottom:1px solid var(--line);padding:12px 20px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+header h1{font-size:17px;margin:0;font-weight:650}
+header .sub{color:var(--muted);font-size:13px}
+header .right{margin-left:auto;display:flex;gap:10px;align-items:center;font-size:13px;color:var(--muted)}
+nav{background:var(--panel);border-bottom:1px solid var(--line);padding:0 12px;display:flex;gap:2px;overflow-x:auto}
+nav button{background:none;border:0;border-bottom:2px solid transparent;color:var(--muted);padding:11px 14px;font:inherit;cursor:pointer;white-space:nowrap}
+nav button:hover:not(:disabled){color:var(--text)}
+nav button.on{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+nav button:disabled{opacity:.4;cursor:not-allowed}
+main{max-width:1120px;margin:0 auto;padding:20px}
+section{display:none}
+section.on{display:block}
+h2{font-size:18px;margin:4px 0 14px}
+h3{font-size:15px;margin:22px 0 10px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;box-shadow:var(--shadow)}
+.grid{display:grid;gap:12px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.stat .n{font-size:28px;font-weight:700;line-height:1.1}
+.stat .l{color:var(--muted);font-size:13px}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+label{display:block;font-size:13px;color:var(--muted);margin:10px 0 4px}
+input[type=text],textarea,select{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text);font:inherit}
+textarea{resize:vertical;min-height:90px}
+#src{min-height:300px;font:13px/1.5 ui-monospace,Menlo,Consolas,monospace}
+button.btn{border:1px solid var(--line);background:var(--panel);color:var(--text);padding:7px 13px;border-radius:8px;font:inherit;cursor:pointer}
+button.btn:hover{border-color:var(--accent)}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+@media (prefers-color-scheme: dark){button.primary{color:#0d1424}}
+button.good{background:var(--good-soft);color:var(--good);border-color:transparent}
+button.bad{background:var(--bad-soft);color:var(--bad);border-color:transparent}
+button.sm{padding:4px 10px;font-size:13px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;background:var(--bg);border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.chip.f{cursor:pointer;font-size:13px;padding:4px 11px}
+.chip.f.on{background:var(--accent-soft);color:var(--accent);border-color:transparent;font-weight:600}
+.risk-High,.st-Rejected{background:var(--bad-soft);color:var(--bad);border-color:transparent}
+.risk-Medium,.st-Needs-Clarification{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.risk-Low{background:var(--good-soft);color:var(--good);border-color:transparent}
+.st-Approved{background:var(--good-soft);color:var(--good);border-color:transparent}
+.st-Pending-Approval{background:var(--info-soft);color:var(--accent);border-color:transparent}
+.cat{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.req{padding:12px 14px;margin-bottom:8px}
+.req.rej{opacity:.55}
+.req .top{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.req .id{font:600 12px ui-monospace,Menlo,Consolas,monospace;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 6px;white-space:nowrap;margin-top:2px}
+.req .stmt{flex:1}
+.req .meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.body{margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.body h4{margin:12px 0 4px;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.body ul,.body ol{margin:4px 0 0;padding-left:20px}
+.quote{border-left:3px solid var(--line);padding-left:10px;color:var(--muted);font-style:italic}
+.issue{background:var(--warn-soft);color:var(--text);border-radius:8px;padding:6px 10px;margin:4px 0;font-size:14px}
+.esc{background:var(--bad-soft);border-radius:8px;padding:6px 10px;margin:4px 0;font-size:14px}
+.bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden;min-width:70px}
+.bar>i{display:block;height:100%;background:var(--accent)}
+.bar.top>i{background:var(--good)}
+.conf{display:inline-flex;gap:6px;align-items:center;font-size:12px;color:var(--muted)}
+.conf .bar{width:46px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+.tablewrap{overflow-x:auto}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+@media (max-width:700px){.pair{grid-template-columns:1fr}}
+.pair>div{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px}
+.rank{display:grid;grid-template-columns:200px 1fr 54px auto;gap:10px;align-items:center;padding:6px 0}
+@media (max-width:700px){.rank{grid-template-columns:1fr 1fr}}
+.phase{padding:14px;margin-bottom:10px}
+.phase dl{display:grid;grid-template-columns:150px 1fr;gap:4px 12px;margin:8px 0 0;font-size:14px}
+.phase dt{color:var(--muted)}
+.phase dd{margin:0}
+.gate{background:var(--accent-soft);color:var(--accent);border-radius:8px;padding:5px 10px;font-size:13px;display:inline-block;margin-top:8px}
+.agent{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line)}
+.agent:last-child{border-bottom:0}
+.agent .num{width:26px;height:26px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-weight:700;display:flex;align-items:center;justify-content:center;flex:none;font-size:13px}
+.notice{background:var(--info-soft);border-radius:10px;padding:10px 14px;font-size:14px}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block;background:var(--muted);margin-right:5px}
+.dot.ok{background:var(--good)} .dot.bad{background:var(--bad)}
+#toast{position:fixed;right:16px;bottom:16px;display:flex;flex-direction:column;gap:8px;z-index:9}
+#toast div{background:var(--text);color:var(--bg);padding:10px 14px;border-radius:8px;font-size:14px;max-width:360px;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+#toast div.err{background:var(--bad);color:#fff}
+body.busy{cursor:progress}
+body.busy .btn{pointer-events:none;opacity:.6}
+.empty{text-align:center;color:var(--muted);padding:30px 10px}
+a.btn{text-decoration:none;display:inline-block}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Library Requirements Agents</h1>
+    <div class="sub">Multi-agent requirement gathering, compliance mapping and SDLC selection</div>
+  </div>
+  <div class="right">
+    <span id="auditState"><span class="dot"></span>no session</span>
+    <label style="margin:0">Reviewer</label>
+    <input id="by" type="text" value="Reviewer" style="width:130px" aria-label="Reviewer name">
+  </div>
+</header>
+<nav id="nav"></nav>
+<main>
+
+<!-- INPUT -->
+<section id="tab-input">
+  <h2>1. Stakeholder input</h2>
+  <div class="grid g2" style="grid-template-columns:2fr 1fr">
+    <div class="card">
+      <div class="row" style="justify-content:space-between">
+        <span class="small muted">One statement per line, tagged with the stakeholder: <code>[Librarian] The system must ...</code></span>
+        <span class="row">
+          <button class="btn sm" data-act="sample">Load sample</button>
+          <label class="btn sm" style="margin:0;cursor:pointer;color:var(--text)">Upload .txt<input id="file" type="file" accept=".txt,.md,text/plain" hidden></label>
+        </span>
+      </div>
+      <textarea id="src" spellcheck="false" placeholder="[Student] I want to renew books online..."></textarea>
+      <div class="notice small" style="margin-top:10px">Emails, phone numbers, Aadhaar-style numbers and member IDs are masked before any agent sees the text, and lines that look like prompt injection are blocked and logged.</div>
+    </div>
+    <div class="card">
+      <label style="margin-top:0">Project name</label>
+      <input id="pname" type="text" value="College Library Management System">
+      <label>Requirement stability</label>
+      <select id="p-stab"><option value="">Auto-estimate</option><option value="0.2">Low (changes often)</option><option value="0.5">Medium</option><option value="0.8">High (stable)</option></select>
+      <label>Stakeholder availability</label>
+      <select id="p-avail"><option value="0.3">Low</option><option value="0.6" selected>Medium</option><option value="0.9">High</option></select>
+      <label>Need for formal verification</label>
+      <select id="p-ver"><option value="">Auto-estimate</option><option value="0.2">Low</option><option value="0.9">High</option></select>
+      <label>Need for continuous delivery</label>
+      <select id="p-cd"><option value="">Auto-estimate</option><option value="0.2">Low</option><option value="0.9">High</option></select>
+      <div style="margin-top:14px"><button class="btn primary" data-act="analyze" style="width:100%">Run the 5 agents</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- OVERVIEW -->
+<section id="tab-overview"></section>
+
+<!-- REQUIREMENTS -->
+<section id="tab-reqs">
+  <h2>Requirements</h2>
+  <div class="row" style="margin-bottom:12px">
+    <input id="q" type="text" placeholder="Search requirements, IDs or stakeholders" style="max-width:320px">
+    <span id="filters" class="row"></span>
+  </div>
+  <div id="reqList"></div>
+</section>
+
+<!-- CLARIFICATION -->
+<section id="tab-clar"></section>
+
+<!-- COMPLIANCE -->
+<section id="tab-comp"></section>
+
+<!-- SDLC -->
+<section id="tab-sdlc"></section>
+
+<!-- OUTPUTS -->
+<section id="tab-out"></section>
+
+</main>
+<div id="toast"></div>
+
+<script>
+"use strict";
+const $ = s => document.querySelector(s);
+const S = {data: null, tab: "input", filter: "all", q: "", open: new Set(), editing: null, audit: null, by: "Reviewer"};
+const TABS = [["input","Input"],["overview","Overview"],["reqs","Requirements"],["clar","Clarification"],["comp","Compliance"],["sdlc","SDLC"],["out","Outputs & audit"]];
+const FACTOR_LABELS = {volatility:"Requirement volatility", regulatory:"Regulatory criticality", security:"Security risk", uncertainty:"Uncertainty", integration:"Integration complexity", continuous_delivery:"Continuous-delivery need", stakeholder_availability:"Stakeholder availability", verification:"Verification need"};
+
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const slug = s => String(s).replace(/\s+/g, "-");
+const pct = v => Math.round(v * 100);
+
+function toast(msg, err) {
+  const d = document.createElement("div");
+  if (err) d.className = "err";
+  d.textContent = msg;
+  $("#toast").appendChild(d);
+  setTimeout(() => d.remove(), err ? 6000 : 3000);
+}
+
+async function api(path, body) {
+  const opt = body === undefined ? {} : {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({...body, by: S.by})};
+  const r = await fetch(path, opt);
+  let j; try { j = await r.json(); } catch (e) { j = {error: "Bad response from server"}; }
+  if (!r.ok) throw new Error(j.error || ("HTTP " + r.status));
+  return j;
+}
+
+async function call(path, body, okMsg) {
+  document.body.classList.add("busy");
+  try {
+    S.data = await api(path, body);
+    S.audit = null;
+    render();
+    if (okMsg) toast(okMsg);
+    return true;
+  } catch (e) {
+    toast(e.message, true);
+    return false;
+  } finally {
+    document.body.classList.remove("busy");
+  }
+}
+
+/* ---------- derived data ---------- */
+const active = () => S.data.requirements.filter(r => r.status !== "Rejected");
+const byId = id => S.data.requirements.find(r => r.id === id);
+
+function clarItems() {
+  const pairs = new Map(), groups = new Map();
+  for (const r of active()) for (const i of r.issues) {
+    if (i.pair) {
+      const k = [...i.pair].sort().join("|");
+      if (!pairs.has(k)) pairs.set(k, {type: i.type, pair: i.pair, question: i.question, detail: i.detail});
+    } else {
+      if (!groups.has(r.id)) groups.set(r.id, []);
+      groups.get(r.id).push(i);
+    }
+  }
+  return {pairs: [...pairs.values()], groups: [...groups.entries()]};
+}
+
+/* ---------- rendering ---------- */
+function renderNav() {
+  $("#nav").innerHTML = TABS.map(([id, label]) => {
+    const dis = !S.data && id !== "input";
+    let badge = "";
+    if (S.data && id === "clar") { const c = clarItems(); const n = c.pairs.length + c.groups.length + S.data.open_questions.length; if (n) badge = ` (${n})`; }
+    if (S.data && id === "comp" && S.data.compliance_gaps.length) badge = ` (${S.data.compliance_gaps.length})`;
+    return `<button data-act="tab" data-tab="${id}" class="${S.tab === id ? "on" : ""}" ${dis ? "disabled" : ""}>${label}${badge}</button>`;
+  }).join("");
+}
+
+function showTab() {
+  document.querySelectorAll("main > section").forEach(s => s.classList.toggle("on", s.id === "tab-" + S.tab));
+}
+
+function renderHeader() {
+  const el = $("#auditState");
+  if (!S.data) { el.innerHTML = '<span class="dot"></span>no session'; return; }
+  el.innerHTML = `<span class="dot ${S.data.audit_ok ? "ok" : "bad"}"></span>audit log ${S.data.audit_ok ? "intact" : "BROKEN"}`;
+}
+
+function renderOverview() {
+  const d = S.data, act = active();
+  const nClar = act.filter(r => r.issues.length).length;
+  const nHigh = act.filter(r => r.risk === "High").length;
+  const nApproved = act.filter(r => r.status === "Approved").length;
+  const maskedTotal = Object.values(d.stats.masked || {}).reduce((a, b) => a + b, 0);
+  const mapped = act.filter(r => r.policies.length).length;
+  const issuesTotal = act.reduce((a, r) => a + r.issues.length, 0);
+  const top = d.sdlc.ranking[0];
+  $("#tab-overview").innerHTML = `
+    <h2>${esc(d.name)}</h2>
+    <div class="grid g4">
+      <div class="card stat"><div class="n">${act.length}</div><div class="l">requirements (${d.requirements.length - act.length} rejected)</div></div>
+      <div class="card stat"><div class="n">${nClar}</div><div class="l">need clarification</div></div>
+      <div class="card stat"><div class="n">${nHigh}</div><div class="l">high risk</div></div>
+      <div class="card stat"><div class="n">${d.compliance_gaps.length}</div><div class="l">compliance gaps</div></div>
+      <div class="card stat"><div class="n">${nApproved}/${act.length}</div><div class="l">approved by a human</div></div>
+      <div class="card stat"><div class="n">${maskedTotal}</div><div class="l">personal data items masked</div></div>
+      <div class="card stat"><div class="n">${(d.stats.injection_lines || []).length}</div><div class="l">injection lines blocked</div></div>
+      <div class="card stat"><div class="n">${esc(d.sdlc.recommended)}</div><div class="l">recommended SDLC (${d.sdlc.approval.startsWith("Pending") ? "pending approval" : esc(d.sdlc.approval)})</div></div>
+    </div>
+    <h3>What each agent did</h3>
+    <div class="card">
+      <div class="agent"><div class="num">1</div><div><b>Requirement Extraction</b><div class="small muted">Found ${d.requirements.length} requirement statements and linked each to its stakeholder and original wording.</div></div></div>
+      <div class="agent"><div class="num">2</div><div><b>Quality &amp; Clarification</b><div class="small muted">Raised ${issuesTotal} issue(s) on ${nClar} requirement(s) and ${d.open_questions.length} missing-area question(s).</div></div></div>
+      <div class="agent"><div class="num">3</div><div><b>Classification</b><div class="small muted">Assigned multi-label categories, module IDs and acceptance criteria.</div></div></div>
+      <div class="agent"><div class="num">4</div><div><b>Policy &amp; Compliance</b><div class="small muted">Mapped ${mapped} requirement(s) to knowledge-base policies with citations; found ${d.compliance_gaps.length} missing control(s).</div></div></div>
+      <div class="agent"><div class="num">5</div><div><b>SDLC Selection</b><div class="small muted">Ranked 7 models; top suitability score is ${top.score}% for ${esc(top.model)}. Final choice needs human approval.</div></div></div>
+    </div>
+    ${(d.stats.injection_lines || []).length ? `<h3>Blocked input</h3><div class="card small">${d.stats.injection_lines.map(l => `<div class="issue">${esc(l)}</div>`).join("")}<div class="muted">These lines looked like instructions aimed at the AI and were removed before analysis.</div></div>` : ""}
+    <p class="small muted" style="margin-top:16px">Advisory mode: nothing is baselined until you approve it. Policy mappings come from an illustrative knowledge base and are not legal determinations.</p>`;
+}
+
+const FILTERS = [["all","All"],["clar","Needs clarification"],["high","High risk"],["pending","Pending approval"],["approved","Approved"],["rejected","Rejected"]];
+function passFilter(r) {
+  switch (S.filter) {
+    case "clar": return r.status === "Needs Clarification";
+    case "high": return r.risk === "High" && r.status !== "Rejected";
+    case "pending": return r.status === "Pending Approval";
+    case "approved": return r.status === "Approved";
+    case "rejected": return r.status === "Rejected";
+    default: return true;
+  }
+}
+function matchQ(r) {
+  if (!S.q) return true;
+  const hay = (r.id + " " + r.statement + " " + r.source + " " + r.categories.join(" ")).toLowerCase();
+  return hay.includes(S.q.toLowerCase());
+}
+
+function reqCard(r) {
+  const open = S.open.has(r.id);
+  let body = "";
+  if (open) {
+    const editing = S.editing === r.id;
+    body = `<div class="body">
+      <h4>Statement</h4>
+      ${editing
+        ? `<textarea id="edit-${esc(r.id)}">${esc(r.statement)}</textarea>
+           <div class="row" style="margin-top:6px"><button class="btn sm primary" data-act="save-edit" data-id="${esc(r.id)}">Save and re-check</button><button class="btn sm" data-act="cancel-edit">Cancel</button></div>`
+        : `<div>${esc(r.statement)}</div>`}
+      <h4>Original stakeholder wording</h4>
+      <div class="quote">${esc(r.source_text)} <span class="small">(${esc(r.source)})</span></div>
+      <h4>Categories</h4>
+      <div class="meta">${r.categories.map(c => `<span class="chip cat">${esc(c)}</span>`).join("")}</div>
+      <h4>Acceptance criteria</h4>
+      <ol>${r.acceptance_criteria.map(a => `<li>${esc(a)}</li>`).join("")}</ol>
+      ${r.policies.length ? `<h4>Evidence (retrieved from the knowledge base)</h4><ul>${r.policies.map(p => `<li><b>${esc(p.id)}</b> ${esc(p.title)} <span class="muted small">(${esc(p.jurisdiction)}, ${esc(p.version)}, score ${p.score})</span><div class="small muted">${esc(p.obligation)}</div></li>`).join("")}</ul>` : ""}
+      ${r.issues.length ? `<h4>Quality issues</h4>${r.issues.map(i => `<div class="issue"><b>${esc(i.type)}</b> (${esc(i.severity)}): ${esc(i.detail)}</div>`).join("")}` : ""}
+      ${r.escalations.length ? `<h4>Human review required</h4>${r.escalations.map(e => `<div class="esc">${esc(e)}</div>`).join("")}` : ""}
+      ${r.notes.length ? `<h4>Notes</h4><div class="small">${r.notes.map(esc).join("<br>")}</div>` : ""}
+      <div class="row" style="margin-top:14px">
+        ${r.status === "Rejected"
+          ? `<button class="btn sm" data-act="decide" data-id="${esc(r.id)}" data-d="Pending">Restore</button>`
+          : `${r.status !== "Approved" ? `<button class="btn sm good" data-act="decide" data-id="${esc(r.id)}" data-d="Approved">Approve</button>` : `<button class="btn sm" data-act="decide" data-id="${esc(r.id)}" data-d="Pending">Withdraw approval</button>`}
+             <button class="btn sm bad" data-act="decide" data-id="${esc(r.id)}" data-d="Rejected">Reject</button>
+             <button class="btn sm" data-act="edit" data-id="${esc(r.id)}">Edit statement</button>`}
+      </div>
+    </div>`;
+  }
+  return `<div class="card req ${r.status === "Rejected" ? "rej" : ""}">
+    <div class="top" data-act="toggle" data-id="${esc(r.id)}">
+      <span class="id">${esc(r.id)}</span>
+      <div class="stmt">${esc(r.statement)}
+        <div class="meta">
+          <span class="chip st-${slug(r.status)}">${esc(r.status)}</span>
+          <span class="chip risk-${esc(r.risk)}">${esc(r.risk)} risk</span>
+          <span class="chip">${esc(r.priority)} priority</span>
+          <span class="chip">${esc(r.source)}</span>
+          ${r.issues.length ? `<span class="chip risk-Medium">${r.issues.length} issue${r.issues.length > 1 ? "s" : ""}</span>` : ""}
+          <span class="conf" title="Confidence score"><span class="bar"><i style="width:${pct(r.confidence)}%"></i></span>${pct(r.confidence)}%</span>
+        </div>
+      </div>
+    </div>${body}</div>`;
+}
+
+function renderReqList() {
+  const list = S.data.requirements.filter(r => passFilter(r) && matchQ(r));
+  $("#reqList").innerHTML = list.length ? list.map(reqCard).join("") : '<div class="empty">No requirements match.</div>';
+  $("#filters").innerHTML = FILTERS.map(([k, label]) => {
+    const n = k === "all" ? S.data.requirements.length : S.data.requirements.filter(r => { const f = S.filter; S.filter = k; const ok = passFilter(r); S.filter = f; return ok; }).length;
+    return `<span class="chip f ${S.filter === k ? "on" : ""}" data-act="filter" data-f="${k}">${label} · ${n}</span>`;
+  }).join("");
+}
+
+function renderClar() {
+  const c = clarItems(), qs = S.data.open_questions;
+  let h = "<h2>Clarification</h2>";
+  if (!c.pairs.length && !c.groups.length && !qs.length) {
+    $("#tab-clar").innerHTML = h + '<div class="card empty">No open clarification items. 🎉 Every requirement passed the quality checks.</div>';
+    return;
+  }
+  h += '<p class="muted small">These are the questions the Clarification agent would send back to stakeholders. Resolve them here; the agents re-check everything afterwards.</p>';
+  if (c.pairs.length) {
+    h += "<h3>Conflicts and duplicates</h3>";
+    h += c.pairs.map(p => {
+      const a = byId(p.pair[0]), b = byId(p.pair[1]);
+      if (!a || !b) return "";
+      const k = esc(a.id + "|" + b.id);
+      return `<div class="card" style="margin-bottom:10px">
+        <span class="chip ${p.type === "Conflict" ? "risk-High" : "risk-Medium"}">${esc(p.type)}</span> <span class="small">${esc(p.question)}</span>
+        <div class="pair"><div><b>${esc(a.id)}</b> · ${esc(a.source)}<br>${esc(a.statement)}</div><div><b>${esc(b.id)}</b> · ${esc(b.source)}<br>${esc(b.statement)}</div></div>
+        <input type="text" id="note-${k}" placeholder="Reason / note (optional, e.g. 'differs by member category')">
+        <div class="row" style="margin-top:8px">
+          <button class="btn sm" data-act="resolve" data-a="${esc(a.id)}" data-b="${esc(b.id)}" data-c="a">Keep ${esc(a.id)}</button>
+          <button class="btn sm" data-act="resolve" data-a="${esc(a.id)}" data-b="${esc(b.id)}" data-c="b">Keep ${esc(b.id)}</button>
+          <button class="btn sm" data-act="resolve" data-a="${esc(a.id)}" data-b="${esc(b.id)}" data-c="both">Both are valid</button>
+        </div></div>`;
+    }).join("");
+  }
+  if (c.groups.length) {
+    h += "<h3>Requirements that need rewording</h3>";
+    h += c.groups.map(([id, issues]) => {
+      const r = byId(id);
+      return `<div class="card" style="margin-bottom:10px">
+        <b>${esc(r.id)}</b> <span class="muted small">· ${esc(r.source)}</span>
+        <div class="quote" style="margin:6px 0">${esc(r.source_text)}</div>
+        ${issues.map(i => `<div class="issue"><b>${esc(i.type)}:</b> ${esc(i.question)}</div>`).join("")}
+        <label>Revised statement</label>
+        <textarea id="rev-${esc(r.id)}" style="min-height:60px">${esc(r.statement)}</textarea>
+        <div class="row" style="margin-top:8px"><button class="btn sm primary" data-act="revise" data-id="${esc(r.id)}">Save and re-check</button></div>
+      </div>`;
+    }).join("");
+  }
+  if (qs.length) {
+    h += "<h3>Areas nobody has mentioned yet</h3>";
+    h += qs.map((g, idx) => `<div class="card" style="margin-bottom:10px">
+      <span class="chip cat">${esc(g.area)}</span> ${esc(g.question)}
+      <textarea id="area-${idx}" style="min-height:60px;margin-top:8px" placeholder="Type the stakeholder's answer as a requirement, e.g. The system shall ..."></textarea>
+      <div class="row" style="margin-top:8px"><button class="btn sm primary" data-act="area" data-idx="${idx}">Add as requirement</button></div>
+    </div>`).join("");
+  }
+  $("#tab-clar").innerHTML = h;
+}
+
+function renderComp() {
+  const d = S.data, act = active();
+  const cov = new Map();
+  for (const r of act) for (const p of r.policies) {
+    if (!cov.has(p.id)) cov.set(p.id, {p, ids: []});
+    cov.get(p.id).ids.push(r.id);
+  }
+  let h = `<h2>Policy &amp; compliance</h2>
+    <div class="notice small">The agent maps requirements to approved sources and checks required controls with deterministic rules. It never makes legal determinations: a compliance or legal officer must approve every mapping.</div>
+    <h3>Policy coverage</h3>`;
+  h += cov.size ? `<div class="card tablewrap"><table><thead><tr><th>Source</th><th>Jurisdiction / version</th><th>Requirements</th></tr></thead><tbody>${
+    [...cov.values()].sort((a, b) => b.ids.length - a.ids.length).map(({p, ids}) => `<tr><td><b>${esc(p.id)}</b><br>${esc(p.title)}</td><td>${esc(p.jurisdiction)}<br><span class="muted small">${esc(p.version)}</span></td><td>${ids.map(i => `<span class="chip">${esc(i)}</span>`).join(" ")}</td></tr>`).join("")
+  }</tbody></table></div>` : '<div class="card empty">No policies mapped.</div>';
+  h += "<h3>Missing controls (suggested additions)</h3>";
+  h += d.compliance_gaps.length ? d.compliance_gaps.map((g, idx) => `<div class="card" style="margin-bottom:10px">
+      <span class="chip risk-High">Gap</span> <b>${esc(g.control)}</b> <span class="muted small">· ${esc(g.policy_title)}</span>
+      <div class="small muted" style="margin-top:4px">${esc(g.message)}</div>
+      <div style="margin-top:8px"><b>Suggested requirement:</b> ${esc(g.suggested_requirement)}</div>
+      <div class="row" style="margin-top:8px"><button class="btn sm primary" data-act="addgap" data-idx="${idx}">Add as requirement</button></div>
+    </div>`).join("") : '<div class="card empty">No missing controls found.</div>';
+  $("#tab-comp").innerHTML = h;
+}
+
+function renderSdlc() {
+  const s = S.data.sdlc;
+  const decided = !s.approval.startsWith("Pending");
+  let h = `<h2>SDLC recommendation</h2>
+    <div class="card">
+      <div class="row" style="justify-content:space-between">
+        <div><div class="muted small">Recommended model</div><div style="font-size:22px;font-weight:700">${esc(s.recommended)}</div></div>
+        <div class="row">
+          <span class="chip st-${decided ? (s.approval.startsWith("Approved") ? "Approved" : "Rejected") : "Pending-Approval"}">${esc(s.approval.startsWith("Pending") ? "Pending approval" : s.approval)}</span>
+          <button class="btn sm good" data-act="sdlc-decide" data-d="Approved">Approve</button>
+          <button class="btn sm bad" data-act="sdlc-decide" data-d="Rejected">Reject</button>
+          ${decided ? '<button class="btn sm" data-act="sdlc-decide" data-d="Pending">Reset</button>' : ""}
+        </div>
+      </div>
+      <p>${esc(s.justification)}</p>
+      <div class="small muted">Approval needs the project manager, architect, security team and compliance officer.</div>
+    </div>
+    <h3>Ranking <span class="muted small">(heuristic suitability, not probability)</span></h3>
+    <div class="card">${s.ranking.map((r, i) => `<div class="rank">
+        <div>${i === 0 ? "★ " : ""}<b>${esc(r.model)}</b>${r.model === s.recommended && i !== 0 ? ' <span class="chip">chosen by team</span>' : ""}</div>
+        <div class="bar ${i === 0 ? "top" : ""}"><i style="width:${r.score}%"></i></div>
+        <div>${r.score}%</div>
+        <div>${r.model === s.recommended ? "" : `<button class="btn sm" data-act="sdlc-model" data-model="${esc(r.model)}">Use this</button>`}</div>
+      </div>`).join("")}</div>
+    <h3>Decision factors</h3>
+    <div class="card grid g2">${Object.entries(s.factors).map(([k, v]) => `<div><div class="row" style="justify-content:space-between"><span class="small">${esc(FACTOR_LABELS[k] || k)}</span><span class="small muted">${v}</span></div><div class="bar"><i style="width:${pct(v)}%"></i></div></div>`).join("")}</div>
+    <h3>Project-specific workflow</h3>`;
+  h += s.workflow.map((p, i) => `<div class="card phase">
+      <b>Phase ${i + 1}: ${esc(p.phase)}</b>
+      <dl>
+        <dt>Activities</dt><dd>${p.activities.map(esc).join("; ")}</dd>
+        <dt>Roles</dt><dd>${p.roles.map(esc).join(", ")}</dd>
+        <dt>Deliverables</dt><dd>${p.deliverables.map(esc).join(", ")}</dd>
+        <dt>Security controls</dt><dd>${p.security.map(esc).join(", ") || "<span class='muted'>None specific</span>"}</dd>
+        <dt>Compliance checkpoints</dt><dd>${p.compliance.map(esc).join(", ") || "<span class='muted'>None specific</span>"}</dd>
+        <dt>Entry / exit</dt><dd>${esc(p.entry_criteria)} → ${esc(p.exit_criteria)}</dd>
+      </dl>
+      <span class="gate">Human-approval gate: ${esc(p.gate)}</span>
+    </div>`).join("");
+  $("#tab-sdlc").innerHTML = h;
+}
+
+function renderOut() {
+  const d = S.data;
+  const labels = {"SRS.md":"Software Requirements Specification","sdlc_plan.md":"SDLC plan and workflow","requirements.json":"All data (JSON)","traceability_matrix.csv":"Requirements traceability matrix","compliance_matrix.csv":"Compliance-control matrix","risk_register.csv":"Risk register","audit_log.jsonl":"Audit log (hash-chained)"};
+  let h = `<h2>Outputs &amp; audit</h2>
+    <div class="card">
+      <div class="row" style="justify-content:space-between"><b>Generated artefacts</b><a class="btn sm primary" href="/download/all.zip">Download all (.zip)</a></div>
+      <table style="margin-top:6px"><tbody>${d.files.map(f => `<tr><td>${esc(labels[f] || f)}</td><td class="muted small">${esc(f)}</td><td style="text-align:right"><a class="btn sm" href="/download/${encodeURIComponent(f)}">Download</a></td></tr>`).join("")}</tbody></table>
+    </div>
+    <h3>Baseline</h3>
+    <div class="card row" style="justify-content:space-between"><span class="small muted">Approve every requirement that is not high-risk, has no open issues and needs no escalation.</span><button class="btn sm good" data-act="bulk">Approve all low-risk validated</button></div>
+    <h3>Approval log</h3>
+    <div class="card tablewrap">${d.approvals.length ? `<table><thead><tr><th>Item</th><th>Decision</th><th>By</th><th>Note</th></tr></thead><tbody>${d.approvals.map(a => `<tr><td>${esc(a.item)}</td><td>${esc(a.decision)}</td><td>${esc(a.by)}</td><td class="muted small">${esc(a.note || "")}</td></tr>`).join("")}</tbody></table>` : '<div class="empty">No human decisions recorded yet (advisory mode).</div>'}</div>
+    <h3>Audit trail <span class="small muted">${S.audit ? (S.audit.ok ? "· hash chain verified" : "· CHAIN BROKEN") : ""}</span></h3>
+    <div class="card tablewrap">${S.audit ? `<table><thead><tr><th>Time</th><th>Agent</th><th>Event</th><th>Details</th></tr></thead><tbody>${S.audit.records.map(r => `<tr><td class="small muted">${esc(r.ts)}</td><td>${esc(r.agent)}</td><td>${esc(r.event)}</td><td class="small muted">${esc(JSON.stringify(r.details))}</td></tr>`).join("")}</tbody></table>` : '<div class="empty">Loading…</div>'}</div>`;
+  $("#tab-out").innerHTML = h;
+}
+
+async function loadAudit() {
+  try { S.audit = await api("/api/audit"); } catch (e) { S.audit = {records: [], ok: false}; }
+  if (S.tab === "out" && S.data) renderOut();
+}
+
+function render() {
+  renderNav(); renderHeader(); showTab();
+  if (!S.data) return;
+  renderOverview(); renderReqList(); renderClar(); renderComp(); renderSdlc(); renderOut();
+  if (S.tab === "out" && !S.audit) loadAudit();
+}
+
+/* ---------- actions ---------- */
+function readProfile() {
+  const num = id => { const v = $(id).value; return v === "" ? null : parseFloat(v); };
+  return {requirement_stability: num("#p-stab"), stakeholder_availability: num("#p-avail"), needs_formal_verification: num("#p-ver"), continuous_delivery_need: num("#p-cd")};
+}
+function nearest(selId, value) {
+  const sel = $(selId);
+  if (value === null || value === undefined) { sel.value = ""; return; }
+  let best = null, bd = 9;
+  for (const o of sel.options) { if (o.value === "") continue; const dd = Math.abs(parseFloat(o.value) - value); if (dd < bd) { bd = dd; best = o.value; } }
+  sel.value = best ?? "";
+}
+
+const ACT = {
+  tab: el => { S.tab = el.dataset.tab; S.editing = null; render(); if (S.tab === "out") { S.audit = null; renderOut(); loadAudit(); } },
+  async sample() {
+    const j = await api("/api/sample");
+    $("#src").value = j.text;
+    const p = j.profile || {};
+    nearest("#p-stab", p.requirement_stability); nearest("#p-avail", p.stakeholder_availability ?? 0.6);
+    nearest("#p-ver", p.needs_formal_verification); nearest("#p-cd", p.continuous_delivery_need);
+    toast("Sample loaded");
+  },
+  async analyze() {
+    const text = $("#src").value;
+    if (!text.trim()) return toast("Paste or load some stakeholder text first.", true);
+    S.open.clear(); S.editing = null; S.filter = "all"; S.q = ""; $("#q").value = "";
+    const ok = await call("/api/analyze", {text, name: $("#pname").value, profile: readProfile()}, "Analysis complete");
+    if (ok) { S.tab = "overview"; render(); }
+  },
+  toggle: el => { const id = el.dataset.id; S.open.has(id) ? S.open.delete(id) : S.open.add(id); renderReqList(); },
+  filter: el => { S.filter = el.dataset.f; renderReqList(); },
+  decide: el => call("/api/decide", {id: el.dataset.id, decision: el.dataset.d}),
+  edit: el => { S.editing = el.dataset.id; renderReqList(); },
+  "cancel-edit": () => { S.editing = null; renderReqList(); },
+  "save-edit": async el => { const id = el.dataset.id; if (await call("/api/revise", {id, statement: $("#edit-" + CSS.escape(id)).value}, "Requirement updated and re-checked")) S.editing = null; render(); },
+  resolve: el => { const a = el.dataset.a, b = el.dataset.b; const n = document.getElementById("note-" + a + "|" + b); return call("/api/resolve", {a, b, choice: el.dataset.c, note: n ? n.value : ""}, "Resolved"); },
+  revise: el => call("/api/revise", {id: el.dataset.id, statement: document.getElementById("rev-" + el.dataset.id).value}, "Requirement updated and re-checked"),
+  area: el => { const t = document.getElementById("area-" + el.dataset.idx).value; if (!t.trim()) return toast("Type an answer first.", true); return call("/api/add", {text: t, who: "Stakeholder (clarification)"}, "Requirement added"); },
+  addgap: el => { const g = S.data.compliance_gaps[+el.dataset.idx]; return call("/api/add", {text: g.suggested_requirement, who: "Compliance Agent (suggested)"}, "Added; pending your approval"); },
+  "sdlc-model": el => call("/api/sdlc_model", {model: el.dataset.model}, "SDLC model changed; workflow regenerated"),
+  "sdlc-decide": el => call("/api/sdlc_decide", {decision: el.dataset.d}),
+  bulk: () => call("/api/approve_low_risk", {}, "Low-risk requirements approved"),
+};
+
+document.addEventListener("click", async e => {
+  const el = e.target.closest("[data-act]");
+  if (!el) return;
+  if (e.target.closest("button, textarea, input, a") && el.dataset.act === "toggle" && !e.target.closest(".top")) return;
+  const fn = ACT[el.dataset.act];
+  if (!fn) return;
+  try { await fn(el); } catch (err) { toast(err.message, true); }
+});
+$("#q").addEventListener("input", e => { S.q = e.target.value; if (S.data) renderReqList(); });
+$("#by").addEventListener("input", e => { S.by = e.target.value.trim() || "Reviewer"; });
+$("#file").addEventListener("change", e => {
+  const f = e.target.files[0]; if (!f) return;
+  const rd = new FileReader();
+  rd.onload = () => { $("#src").value = String(rd.result); toast("File loaded"); };
+  rd.readAsText(f);
+});
+
+(async function init() {
+  render();
+  try {
+    const st = await api("/api/state");
+    if (!st.empty) { S.data = st; S.tab = "overview"; $("#pname").value = st.name; render(); }
+    else { await ACT.sample(); }
+  } catch (e) { toast("Could not reach the server: " + e.message, true); }
+})();
+</script>
+</body>
+</html>

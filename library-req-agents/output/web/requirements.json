@@ -1,0 +1,618 @@
+{
+  "project": "College Library Management System",
+  "requirements": [
+    {
+      "id": "FR-DIG-001",
+      "statement": "The system shall allow Student users to access IEEE and Springer e-journals from off-campus using my university email ID without configuring a complex VPN",
+      "source": "Student",
+      "source_text": "I need to access IEEE and Springer e-journals from off-campus using my university email ID without configuring a complex VPN.",
+      "priority": "Medium",
+      "categories": [
+        "Functional",
+        "Privacy",
+        "Operational",
+        "Copyright/Licence",
+        "Regulatory"
+      ],
+      "module": "DIG",
+      "acceptance_criteria": [
+        "Verified by at least one positive and one negative test case for: The system shall allow Student users to access IEEE and Springer e-journals from off-campus using my university email ID without configuring a complex VPN.",
+        "Personal data is masked in logs and exports; consent and purpose are recorded where data is collected."
+      ],
+      "policies": [
+        {
+          "id": "KB-COPYRIGHT-LICENCE",
+          "title": "Copyright Act, 1957 and publisher licence terms for e-resources",
+          "source": "Government of India / publisher agreements",
+          "jurisdiction": "India",
+          "version": "per-licence",
+          "effective_date": "1957 (amended); licences per contract",
+          "score": 0.488,
+          "obligation": "Use of e-journals, e-books and databases is limited by licence: only authorised users, simultaneous-user limits, download and print limits, and no systematic bulk downloading. Remote access must be through authentication.",
+          "control": "Authenticate users, enforce simultaneous-user and download limits per licence, detect bulk downloading and keep usage statistics."
+        },
+        {
+          "id": "KB-DPDP-2023",
+          "title": "Digital Personal Data Protection Act, 2023",
+          "source": "Government of India",
+          "jurisdiction": "India",
+          "version": "2023",
+          "effective_date": "Enacted 2023-08-11 (verify commencement of provisions)",
+          "score": 0.392,
+          "obligation": "Processing of digital personal data needs a lawful purpose, notice and consent. Collect only data necessary for the stated purpose, keep it only as long as needed, apply reasonable security safeguards, report personal data breaches, and let individuals access, correct and erase their data. Extra care applies to children's data.",
+          "control": "Record consent and purpose, minimise collected fields, define retention and deletion schedules, mask personal data in logs and exports, support access/correction/erasure requests, and maintain a breach-response procedure."
+        }
+      ],
+      "issues": [],
+      "escalations": [
+        "Policy/regulatory interpretation must be approved by the compliance or legal officer."
+      ],
+      "risk": "High",
+      "confidence": 0.8,
+      "status": "Pending Approval",
+      "notes": []
+    },
+    {
+      "id": "FR-REP-001",
+      "statement": "The system shall allow downloading up to 50 research papers per day for thesis supervision, and cite them automatically in APA and BibTeX formats",
+      "source": "Faculty",
+      "source_text": "The portal should allow downloading up to 50 research papers per day for thesis supervision, and cite them automatically in APA and BibTeX formats.",
+      "priority": "Medium",
+      "categories": [
+        "Functional"
+      ],
+      "module": "REP",
+      "acceptance_criteria": [
+        "Verified by at least one positive and one negative test case for: The system shall allow downloading up to 50 research papers per day for thesis supervision, and cite them automatically in APA and BibTeX formats."
+      ],
+      "policies": [
+        {
+          "id": "KB-OA-REPO",
+          "title": "Institutional repository and open-access policy (UGC ETD regulations)",
+          "source": "UGC / institutional policy",
+          "jurisdiction": "India",
+          "version": "policy-v1",
+          "effective_date": "UGC 2016; policy per institution",
+          "score": 0.365,
+          "obligation": "Theses and dissertations are deposited electronically in the institutional repository and the national ETD repository as required. Institutional policy defines embargo periods, access levels and licences for deposited work.",
+          "control": "Deposit workflow with supervisor approval, embargo handling, plagiarism-check record and licence capture."
+        },
+        {
+          "id": "KB-COPYRIGHT-LICENCE",
+          "title": "Copyright Act, 1957 and publisher licence terms for e-resources",
+          "source": "Government of India / publisher agreements",
+          "jurisdiction": "India",
+          "version": "per-licence",
+          "effective_date": "1957 (amended); licences per contract",
+          "score": 0.362,
+          "obligation": "Use of e-journals, e-books and databases is limited by licence: only authorised users, simultaneous-user limits, download and print limits, and no systematic bulk downloading. Remote access must be through authentication.",
+          "control": "Authenticate users, enforce simultaneous-user and download limits per licence, detect bulk downloading and keep usage statistics."
+        }
+      ],
+      "issues": [],
+      "escalations": [],
+      "risk": "Low",
+      "confidence": 0.77,
+      "status": "Pending Approval",
+      "notes": []
+    },
+    {
+      "id": "FR-GEN-001",
+      "statement": "Simultaneous user access for the Economics database shall be strictly capped at 15 concurrent users, and bulk automated scraping must be blocked",
+      "source": "Publisher",
+      "source_text": "Simultaneous user access for the Economics database must be strictly capped at 15 concurrent users, and bulk automated scraping must be blocked.",
+      "priority": "High",
+      "categories": [
+        "Functional",
+        "Copyright/Licence",
+        "Performance",
+        "Data Management",
+        "Regulatory"
+      ],
+      "module": "GEN",
+      "acceptance_criteria": [
+        "Verified by at least one positive and one negative test case for: Simultaneous user access for the Economics database shall be strictly capped at 15 concurrent users, and bulk automated scraping must be blocked.",
+        "Licence limits (simultaneous users, download caps) are enforced as written in the publisher agreement.",
+        "The agreed response-time target (value to be confirmed with stakeholders) is met under peak load."
+      ],
+      "policies": [
+        {
+          "id": "KB-COPYRIGHT-LICENCE",
+          "title": "Copyright Act, 1957 and publisher licence terms for e-resources",
+          "source": "Government of India / publisher agreements",
+          "jurisdiction": "India",
+          "version": "per-licence",
+          "effective_date": "1957 (amended); licences per contract",
+          "score": 1.0,
+          "obligation": "Use of e-journals, e-books and databases is limited by licence: only authorised users, simultaneous-user limits, download and print limits, and no systematic bulk downloading. Remote access must be through authentication.",
+          "control": "Authenticate users, enforce simultaneous-user and download limits per licence, detect bulk downloading and keep usage statistics."
+        },
+        {
+          "id": "KB-POL-LENDING",
+          "title": "Institutional lending and fines policy (placeholder)",
+          "source": "Library Committee",
+          "jurisdiction": "Institution",
+          "version": "policy-v1",
+          "effective_date": "per institution",
+          "score": 0.3,
+          "obligation": "Loan periods, borrowing limits and fine rates are set per member category by the library committee. Any fine waiver or block override needs an authorised librarian and a recorded reason.",
+          "control": "Policy parameters configurable per member category; overrides authorised and logged with reason."
+        }
+      ],
+      "issues": [],
+      "escalations": [
+        "Policy/regulatory interpretation must be approved by the compliance or legal officer."
+      ],
+      "risk": "High",
+      "confidence": 0.93,
+      "status": "Pending Approval",
+      "notes": []
+    },
+    {
+      "id": "FR-CIR-001",
+      "statement": "The system shall provide monthly COUNTER-compliant usage statistics broken down by department to justify subscription renewals",
+      "source": "Librarian",
+      "source_text": "We need monthly COUNTER-compliant usage statistics broken down by department to justify subscription renewals.",
+      "priority": "Medium",
+      "categories": [
+        "Functional",
+        "Copyright/Licence",
+        "Audit & Reporting",
+        "Regulatory"
+      ],
+      "module": "CIR",
+      "acceptance_criteria": [
+        "Verified by at least one positive and one negative test case for: The system shall provide monthly COUNTER-compliant usage statistics broken down by department to justify subscription renewals.",
+        "Licence limits (simultaneous users, download caps) are enforced as written in the publisher agreement.",
+        "Each relevant action records user ID, timestamp, action and outcome in the audit log."
+      ],
+      "policies": [
+        {
+          "id": "KB-ACCREDITATION",
+          "title": "Accreditation and ranking data requirements (NAAC / NBA / NIRF)",
+          "source": "NAAC / NBA / NIRF",
+          "jurisdiction": "India",
+          "version": "per-cycle",
+          "effective_date": "per cycle",
+          "score": 0.513,
+          "obligation": "Library data such as holdings, expenditure on books and journals, e-resource subscriptions, usage statistics and footfall must be reportable by academic year with supporting evidence.",
+          "control": "Scheduled and on-demand reports by academic year with CSV/PDF export and source-record drill-down."
+        },
+        {
+          "id": "KB-COPYRIGHT-LICENCE",
+          "title": "Copyright Act, 1957 and publisher licence terms for e-resources",
+          "source": "Government of India / publisher agreements",
+          "jurisdiction": "India",
+          "version": "per-licence",
+          "effective_date": "1957 (amended); licences per contract",
+          "score": 0.377,
+          "obligation": "Use of e-journals, e-books and databases is limited by licence: only authorised users, simultaneous-user limits, download and print limits, and no systematic bulk downloading. Remote access must be through authentication.",
+          "control": "Authenticate users, enforce simultaneous-user and download limits per licence, detect bulk downloading and keep usage statistics."
+        },
+        {
+          "id": "KB-POL-LENDING",
+          "title": "Institutional lending and fines policy (placeholder)",
+          "source": "Library Committee",
+          "jurisdiction": "Institution",
+          "version": "policy-v1",
+          "effective_date": "per institution",
+          "score": 0.3,
+          "obligation": "Loan periods, borrowing limits and fine rates are set per member category by the library committee. Any fine waiver or block override needs an authorised librarian and a recorded reason.",
+          "control": "Policy parameters configurable per member category; overrides authorised and logged with reason."
+        }
+      ],
+      "issues": [],
+      "escalations": [
+        "Policy/regulatory interpretation must be approved by the compliance or legal officer."
+      ],
+      "risk": "High",
+      "confidence": 0.8,
+      "status": "Pending Approval",
+      "notes": []
+    },
+    {
+      "id": "FR-GEN-002",
+      "statement": "The system shall be accessible for visually impaired students with screen-reader support and high-contrast modes",
+      "source": "Admin",
+      "source_text": "The portal must be accessible for visually impaired students with screen-reader support and high-contrast modes.",
+      "priority": "High",
+      "categories": [
+        "Functional",
+        "Accessibility",
+        "Regulatory"
+      ],
+      "module": "GEN",
+      "acceptance_criteria": [
+        "Verified by at least one positive and one negative test case for: The system shall be accessible for visually impaired students with screen-reader support and high-contrast modes.",
+        "Affected screens pass a WCAG 2.1 AA check and work with a screen reader and keyboard only."
+      ],
+      "policies": [
+        {
+          "id": "KB-RPWD-WCAG",
+          "title": "Rights of Persons with Disabilities Act, 2016 and WCAG 2.1 AA",
+          "source": "Government of India / W3C",
+          "jurisdiction": "India / International",
+          "version": "WCAG-2.1-AA",
+          "effective_date": "RPwD 2016; WCAG 2.1 (2018)",
+          "score": 1.0,
+          "obligation": "Public-facing ICT services should be accessible to persons with disabilities. Web interfaces should conform to WCAG 2.1 level AA: screen-reader support, keyboard navigation, text alternatives, sufficient contrast and accessible document formats.",
+          "control": "Design and test to WCAG 2.1 AA, including screen-reader and keyboard-only testing."
+        }
+      ],
+      "issues": [],
+      "escalations": [
+        "Policy/regulatory interpretation must be approved by the compliance or legal officer."
+      ],
+      "risk": "High",
+      "confidence": 0.93,
+      "status": "Pending Approval",
+      "notes": []
+    },
+    {
+      "id": "FR-SEC-001",
+      "statement": "All remote sessions shall enforce single sign-on (SSO) with multi-factor authentication and log user IP addresses for 180 days",
+      "source": "It-security",
+      "source_text": "All remote sessions must enforce single sign-on (SSO) with multi-factor authentication and log user IP addresses for 180 days.",
+      "priority": "High",
+      "categories": [
+        "Functional",
+        "Security",
+        "Privacy",
+        "Integration",
+        "Audit & Reporting",
+        "Regulatory"
+      ],
+      "module": "SEC",
+      "acceptance_criteria": [
+        "Verified by at least one positive and one negative test case for: All remote sessions shall enforce single sign-on (SSO) with multi-factor authentication and log user IP addresses for 180 days.",
+        "Attempts by unauthorised roles are rejected and the attempt is logged.",
+        "Personal data is masked in logs and exports; consent and purpose are recorded where data is collected.",
+        "The interface passes a conformance test against the agreed standard (e.g. SIP2, NCIP, OAI-PMH) in the test environment.",
+        "Each relevant action records user ID, timestamp, action and outcome in the audit log."
+      ],
+      "policies": [
+        {
+          "id": "KB-ASVS",
+          "title": "Application security controls (OWASP ASVS / ISO 27001 aligned)",
+          "source": "OWASP / ISO",
+          "jurisdiction": "International",
+          "version": "4.0.3",
+          "effective_date": "ASVS 4.0.3",
+          "score": 0.907,
+          "obligation": "Applications should use strong authentication, secure session management, input validation, least privilege, secure logging and protection of APIs against injection.",
+          "control": "Single sign-on or multi-factor authentication for staff, session timeout, input validation and secure API design."
+        },
+        {
+          "id": "KB-ITACT-2000",
+          "title": "Information Technology Act, 2000 and institutional IT security policy",
+          "source": "Government of India / University IT policy",
+          "jurisdiction": "India",
+          "version": "2000-amended",
+          "effective_date": "2000 (amended); policy version per institution",
+          "score": 0.685,
+          "obligation": "Unauthorised access to computer systems and data is an offence. Institutions are expected to apply reasonable security practices, restrict access by role, encrypt sensitive data and report cyber security incidents as required.",
+          "control": "Role-based access control, encryption in transit and at rest, access logging, and an incident-reporting procedure."
+        },
+        {
+          "id": "KB-POL-RECORDS",
+          "title": "Institutional records retention and audit policy (placeholder)",
+          "source": "University administration",
+          "jurisdiction": "Institution",
+          "version": "policy-v1",
+          "effective_date": "per institution",
+          "score": 0.349,
+          "obligation": "Transaction and audit records are retained for the institution-defined period, are tamper-evident and are backed up with a tested recovery procedure.",
+          "control": "Immutable audit log, scheduled backups and tested recovery."
+        }
+      ],
+      "issues": [],
+      "escalations": [
+        "Policy/regulatory interpretation must be approved by the compliance or legal officer."
+      ],
+      "risk": "High",
+      "confidence": 0.9,
+      "status": "Pending Approval",
+      "notes": []
+    }
+  ],
+  "open_questions": [
+    {
+      "area": "Availability",
+      "question": "What uptime, backup and recovery expectations apply?"
+    }
+  ],
+  "compliance_gaps": [
+    {
+      "policy_id": "KB-DPDP-2023",
+      "policy_title": "Digital Personal Data Protection Act, 2023",
+      "control": "Consent and notice",
+      "message": "No requirement covers 'Consent and notice' required by Digital Personal Data Protection Act, 2023.",
+      "suggested_requirement": "The system shall record each member's consent and the purpose for which personal data is collected, and display a privacy notice at registration.",
+      "status": "Suggested - needs approval"
+    },
+    {
+      "policy_id": "KB-DPDP-2023",
+      "policy_title": "Digital Personal Data Protection Act, 2023",
+      "control": "Retention and deletion",
+      "message": "No requirement covers 'Retention and deletion' required by Digital Personal Data Protection Act, 2023.",
+      "suggested_requirement": "The system shall retain borrowing history only for the institution-approved retention period and then delete or anonymise it.",
+      "status": "Suggested - needs approval"
+    },
+    {
+      "policy_id": "KB-DPDP-2023",
+      "policy_title": "Digital Personal Data Protection Act, 2023",
+      "control": "Data-subject rights",
+      "message": "No requirement covers 'Data-subject rights' required by Digital Personal Data Protection Act, 2023.",
+      "suggested_requirement": "The system shall let members request access to, correction of, or erasure of their personal data, with each request logged.",
+      "status": "Suggested - needs approval"
+    },
+    {
+      "policy_id": "KB-ITACT-2000",
+      "policy_title": "Information Technology Act, 2000 and institutional IT security policy",
+      "control": "Role-based access control",
+      "message": "No requirement covers 'Role-based access control' required by Information Technology Act, 2000 and institutional IT security policy.",
+      "suggested_requirement": "The system shall enforce role-based access control so each staff and member role can access only the functions and data it needs.",
+      "status": "Suggested - needs approval"
+    },
+    {
+      "policy_id": "KB-ITACT-2000",
+      "policy_title": "Information Technology Act, 2000 and institutional IT security policy",
+      "control": "Encryption",
+      "message": "No requirement covers 'Encryption' required by Information Technology Act, 2000 and institutional IT security policy.",
+      "suggested_requirement": "The system shall encrypt personal and transaction data in transit and at rest.",
+      "status": "Suggested - needs approval"
+    },
+    {
+      "policy_id": "KB-OA-REPO",
+      "policy_title": "Institutional repository and open-access policy (UGC ETD regulations)",
+      "control": "Embargo handling",
+      "message": "No requirement covers 'Embargo handling' required by Institutional repository and open-access policy (UGC ETD regulations).",
+      "suggested_requirement": "The system shall support embargo periods on deposited theses and release them automatically on the approved date.",
+      "status": "Suggested - needs approval"
+    },
+    {
+      "policy_id": "KB-OA-REPO",
+      "policy_title": "Institutional repository and open-access policy (UGC ETD regulations)",
+      "control": "Descriptive metadata",
+      "message": "No requirement covers 'Descriptive metadata' required by Institutional repository and open-access policy (UGC ETD regulations).",
+      "suggested_requirement": "The system shall capture Dublin Core metadata for every deposited item.",
+      "status": "Suggested - needs approval"
+    },
+    {
+      "policy_id": "KB-ACCREDITATION",
+      "policy_title": "Accreditation and ranking data requirements (NAAC / NBA / NIRF)",
+      "control": "Evidence export",
+      "message": "No requirement covers 'Evidence export' required by Accreditation and ranking data requirements (NAAC / NBA / NIRF).",
+      "suggested_requirement": "The system shall export accreditation reports by academic year in CSV and PDF with drill-down to source records.",
+      "status": "Suggested - needs approval"
+    },
+    {
+      "policy_id": "KB-POL-LENDING",
+      "policy_title": "Institutional lending and fines policy (placeholder)",
+      "control": "Configurable policy parameters",
+      "message": "No requirement covers 'Configurable policy parameters' required by Institutional lending and fines policy (placeholder).",
+      "suggested_requirement": "The system shall let an authorised administrator configure loan period, borrowing limit and fine rate per member category.",
+      "status": "Suggested - needs approval"
+    },
+    {
+      "policy_id": "KB-POL-RECORDS",
+      "policy_title": "Institutional records retention and audit policy (placeholder)",
+      "control": "Backup and recovery",
+      "message": "No requirement covers 'Backup and recovery' required by Institutional records retention and audit policy (placeholder).",
+      "suggested_requirement": "The system shall back up data daily and support recovery within the institution-approved RTO and RPO.",
+      "status": "Suggested - needs approval"
+    }
+  ],
+  "sdlc": {
+    "factors": {
+      "volatility": 0.5,
+      "regulatory": 1.0,
+      "security": 1.0,
+      "uncertainty": 0.1,
+      "integration": 0.42,
+      "continuous_delivery": 0.33,
+      "stakeholder_availability": 0.6,
+      "verification": 1.0
+    },
+    "ranking": [
+      {
+        "model": "V-Model",
+        "score": 78,
+        "rules_applied": [
+          "Strict verification needed -> V-Model family"
+        ]
+      },
+      {
+        "model": "Agile-V-Model hybrid",
+        "score": 71,
+        "rules_applied": [
+          "Strict verification needed -> V-Model family"
+        ]
+      },
+      {
+        "model": "Waterfall",
+        "score": 51,
+        "rules_applied": [
+          "Strict verification needed -> V-Model family"
+        ]
+      },
+      {
+        "model": "DevSecOps",
+        "score": 51,
+        "rules_applied": [
+          "Strict verification needed -> V-Model family"
+        ]
+      },
+      {
+        "model": "Agile-DevSecOps hybrid",
+        "score": 45,
+        "rules_applied": [
+          "Strict verification needed -> V-Model family"
+        ]
+      },
+      {
+        "model": "Spiral",
+        "score": 45,
+        "rules_applied": [
+          "Strict verification needed -> V-Model family"
+        ]
+      },
+      {
+        "model": "Agile",
+        "score": 23,
+        "rules_applied": [
+          "Strict verification needed -> V-Model family"
+        ]
+      }
+    ],
+    "recommended": "V-Model",
+    "justification": "V-Model scores highest (78) against Agile-V-Model hybrid (71) and Waterfall (51). High factors: regulatory, security, stakeholder_availability, verification. Low factors: uncertainty. Rules applied: Strict verification needed -> V-Model family. This is a heuristic recommendation; the project manager, architect, security team and compliance officer must approve it.",
+    "workflow": [
+      {
+        "phase": "Requirements and Acceptance Test Planning",
+        "activities": [
+          "Baseline requirements",
+          "Write acceptance tests per requirement"
+        ],
+        "roles": [
+          "Business Analyst",
+          "QA"
+        ],
+        "deliverables": [
+          "SRS",
+          "Acceptance test plan"
+        ],
+        "security": [
+          "Data classification"
+        ],
+        "compliance": [
+          "Policy mapping reviewed",
+          "Interface conformance tests (SIP2 / NCIP / OAI-PMH / SSO)",
+          "WCAG 2.1 AA audit with screen reader",
+          "Licence-limit tests (simultaneous users, download caps)",
+          "Audit-log completeness and report-accuracy checks",
+          "Data-retention and deletion schedule verified",
+          "Accreditation report sample reviewed by librarian"
+        ],
+        "gate": "Requirements baseline approval",
+        "entry_criteria": "Approved scope and stakeholder list",
+        "exit_criteria": "Requirements baseline approval recorded in the audit log"
+      },
+      {
+        "phase": "System Design and System Test Planning",
+        "activities": [
+          "Architecture",
+          "System test design"
+        ],
+        "roles": [
+          "Architect",
+          "QA"
+        ],
+        "deliverables": [
+          "Design",
+          "System test plan"
+        ],
+        "security": [
+          "Threat modelling"
+        ],
+        "compliance": [
+          "Privacy impact assessment",
+          "Privacy impact assessment (DPDP Act)",
+          "Role and permission matrix reviewed",
+          "Interface conformance tests (SIP2 / NCIP / OAI-PMH / SSO)",
+          "WCAG 2.1 AA audit with screen reader",
+          "Licence-limit tests (simultaneous users, download caps)",
+          "Audit-log completeness and report-accuracy checks"
+        ],
+        "gate": "Design review",
+        "entry_criteria": "Previous gate approved",
+        "exit_criteria": "Design review recorded in the audit log"
+      },
+      {
+        "phase": "Module Design and Implementation",
+        "activities": [
+          "Detailed design",
+          "Coding",
+          "Unit tests"
+        ],
+        "roles": [
+          "Developers"
+        ],
+        "deliverables": [
+          "Code",
+          "Unit test results"
+        ],
+        "security": [
+          "Static analysis"
+        ],
+        "compliance": [
+          "Traceability to requirement IDs",
+          "Privacy impact assessment (DPDP Act)",
+          "Role and permission matrix reviewed"
+        ],
+        "gate": "Code review gate",
+        "entry_criteria": "Previous gate approved",
+        "exit_criteria": "Code review gate recorded in the audit log"
+      },
+      {
+        "phase": "Integration and System Verification",
+        "activities": [
+          "Integration test",
+          "System test",
+          "Interface conformance"
+        ],
+        "roles": [
+          "QA",
+          "Integrator"
+        ],
+        "deliverables": [
+          "Verification reports"
+        ],
+        "security": [
+          "Security testing"
+        ],
+        "compliance": [
+          "Evidence mapped to controls",
+          "Interface conformance tests (SIP2 / NCIP / OAI-PMH / SSO)",
+          "WCAG 2.1 AA audit with screen reader",
+          "Licence-limit tests (simultaneous users, download caps)",
+          "Audit-log completeness and report-accuracy checks"
+        ],
+        "gate": "Verification gate",
+        "entry_criteria": "Previous gate approved",
+        "exit_criteria": "Verification gate recorded in the audit log"
+      },
+      {
+        "phase": "Acceptance and Release",
+        "activities": [
+          "User acceptance testing",
+          "Deployment"
+        ],
+        "roles": [
+          "Librarians",
+          "Compliance Officer"
+        ],
+        "deliverables": [
+          "UAT sign-off"
+        ],
+        "security": [
+          "Hardening"
+        ],
+        "compliance": [
+          "Compliance sign-off",
+          "Data-retention and deletion schedule verified",
+          "Accreditation report sample reviewed by librarian"
+        ],
+        "gate": "Production-readiness approval",
+        "entry_criteria": "Previous gate approved",
+        "exit_criteria": "Production-readiness approval recorded in the audit log"
+      }
+    ],
+    "approval": "Pending - requires project manager, architect, security team and compliance officer"
+  },
+  "approvals": [],
+  "stats": {
+    "masked": {},
+    "injection_lines": []
+  }
+}

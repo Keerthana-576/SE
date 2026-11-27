@@ -1,0 +1,7 @@
+{
+  "requirement_stability": 0.4,
+  "stakeholder_availability": 0.7,
+  "needs_formal_verification": null,
+  "extensive_approvals": false,
+  "continuous_delivery_need": null
+}

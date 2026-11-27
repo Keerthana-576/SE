@@ -1,0 +1,16 @@
+Requirement ID,Stakeholder,Original statement (masked),Policy IDs,Acceptance criteria,Test case IDs,Status
+FR-CIR-001,Student,I want to renew books online without visiting the library.,KB-POL-LENDING; KB-RPWD-WCAG,1,TC-FR-CIR-001-01,Pending Approval
+BR-CIR-001,Student,The loan period should be 21 days for undergraduates.,KB-POL-LENDING,1,TC-BR-CIR-001-01,Needs Clarification
+NFR-GEN-001,Student,The system must be fast.,,2,TC-NFR-GEN-001-01; TC-NFR-GEN-001-02,Needs Clarification
+BR-CIR-002,Librarian,Loan period must be 14 days for all members.,KB-POL-LENDING,1,TC-BR-CIR-002-01,Needs Clarification
+FR-CIR-002,Librarian,The system must block issue if the member's fines exceed the limit.,KB-POL-LENDING,1,TC-FR-CIR-002-01,Needs Clarification
+FR-GEN-001,Librarian,Librarians should be able to override a block when needed.,KB-POL-LENDING,1,TC-FR-GEN-001-01,Needs Clarification
+BR-CIR-003,Librarian,Fine should be Rs 2 per day per book.,KB-POL-LENDING,1,TC-BR-CIR-003-01,Needs Clarification
+FR-RPT-001,Librarian,Members' reading history should be stored for analytics.,KB-DPDP-2023; KB-ACCREDITATION; KB-POL-RECORDS,3,TC-FR-RPT-001-01; TC-FR-RPT-001-02; TC-FR-RPT-001-03,Pending Approval
+BR-CIR-004,Admin,Fine of Rs 5 per day per book must be charged for overdue items.,KB-POL-LENDING,1,TC-BR-CIR-004-01,Needs Clarification
+FR-RPT-002,Admin,"We need reports for NAAC accreditation, etc.",KB-ACCREDITATION,3,TC-FR-RPT-002-01; TC-FR-RPT-002-02; TC-FR-RPT-002-03,Needs Clarification
+FR-DIG-001,Faculty,I need remote access to e-journals from home with a user-friendly interface.,KB-COPYRIGHT-LICENCE; KB-RPWD-WCAG,1,TC-FR-DIG-001-01,Needs Clarification
+FR-REP-001,Faculty,Theses should be deposited in the repository with open access after the embargo.,KB-OA-REPO; KB-OAI-PMH,1,TC-FR-REP-001-01,Pending Approval
+NFR-INT-001,IT Admin,The system must integrate with Koha and the university ERP using SIP2.,KB-SIP2-NCIP,2,TC-NFR-INT-001-01; TC-NFR-INT-001-02,Pending Approval
+FR-INT-001,IT Admin,The system shall support RFID self-checkout kiosks.,KB-SIP2-NCIP,2,TC-FR-INT-001-01; TC-FR-INT-001-02,Pending Approval
+NFR-SEC-001,IT Security,The system must use the university single sign-on for staff login.,KB-ASVS; KB-ITACT-2000; KB-POL-RECORDS,2,TC-NFR-SEC-001-01; TC-NFR-SEC-001-02,Pending Approval
